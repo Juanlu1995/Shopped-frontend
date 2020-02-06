@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Suspense} from 'react';
+import './App.scss';
+import configureStore from './configureStore';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route
+} from "react-router-dom";
+import {Provider} from "react-redux";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import DefaultLayout from "./containers/DefaultLayout";
+
+const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
+
+const store = configureStore();
+
+
+const App = (props) => {
+    return (
+        <Provider store={store}>
+            <Router>
+                <main className={'main-body'}>
+                    <Suspense fallback={loading()}>
+                        <Switch>
+                            <Route path={'/'} component={DefaultLayout}/>
+                        </Switch>
+                    </Suspense>
+                </main>
+            </Router>
+        </Provider>
+    );
+};
 
 export default App;
